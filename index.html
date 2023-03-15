@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" defer src="script.js"></script>
+    <script src="https://kit.fontawesome.com/1aeece73fc.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Tic-Tac-Toe</title>
+</head>
+<body>
+<header>
+<h1>Tic-Tac-Toe</h1>
+    <div id="game-settings">
+        <form id="boardspecs" action="">
+            <label for="board-size">
+                Size of Board :   
+            <select name="board size" id="board-size">
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+                <option value="9">9</option>
+            </select>  
+            </label>
+            <label for="rounds-menu">
+                Number of Rounds:
+                <select name="Rounds" id="rounds-menu">
+                    <option value="3">best out of 3</option>
+                    <option value="5">best out of 5</option>
+                </select>
+            </label>
+            <label for="computer-player-switch">
+                play against computer?
+               <input type="checkbox" name="" id="computer-player-switch"> 
+            </label>
+            <button id="start-button">play</button>
+            
+        </form>
+        <form  class="nameinput" action="">
+            <label for="">
+                player 1:
+              <input  id="player1" type="text" placeholder="click play to submit">  
+            </label>
+            <label for="">
+                player 2:
+              <input  id="player2" type="text" placeholder="click play to submit">  
+            </label>
+        </form>
+        
+            
+            
+        
+    </div>
+</header>
+<main>
+    <div id="player-1-area" class="sidebar">
+        <p>player1</p>
+        <img src="player 1 sus.svg" alt="">
+        <p id="player-1-score" class="score">0</p>
+    </div>
+    <div id="gamearea">
+        <section id="board">
+             
+               
+        </section>
+    </div>
+    <div id="player-2-area" class="sidebar">
+        <p>player2</p>
+        <img src="player 2 sus.svg" alt="">
+        <p id="player-2-score" class="score">0</p>
+    </div>
+</main>
+<footer>
+   <span>Round:</span>
+   <span id="round-number">0</span>
+</footer>
+</body>
+</html>

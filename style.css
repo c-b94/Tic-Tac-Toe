@@ -1,0 +1,176 @@
+*{
+    padding:0px;
+    box-sizing: border-box;
+    margin:0px;
+    
+}
+body{
+    display:flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background-color: #139A6F;
+    }
+
+header h1 {
+    text-align: center;
+    background-color: #2470DB;
+}
+header{
+font-size: 1.2rem;
+display:flex;
+flex-direction: column;
+background-color: #5224DB;    
+}
+#boardspecs label{
+display: flex;
+
+}
+#boardspecs button{
+    float: right;
+    width: auto;
+}
+.nameinput{
+    display:flex;
+    flex-direction:row;
+    column-gap:3rem ;
+    margin-top: 40px;
+    
+}
+#game-settings{
+display:flex;
+height: 50%;
+justify-content: space-between;
+}
+main{
+  height: 90%;
+  display:flex;
+  justify-content: space-between;
+  column-gap: 3px;
+    
+  background-color: #139A6F; 
+  
+}
+main div{
+   
+    
+}
+.sidebar{
+    background-color: #248FDB;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:30%;
+    font-size:2rem;
+    text-align: center;
+
+}
+.sidebar img{
+    width:50%;
+    margin-top: 20%;
+    margin-bottom:20%;
+}
+.score{
+    font-size: 7rem;
+}
+#gamearea{
+    width:70%;
+    background-color: #4555B0;
+}
+#board{
+    display:grid;
+    width:100%;
+    height:100%;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(3,1fr);
+}
+#board div{
+    background-color: #459EB2;
+    border-radius: 10rem;
+    
+     outline: solid black 1px; 
+    
+    display:flex;
+    justify-content: center;
+    align-items: center
+}
+#board div p{
+    
+    font-size: 3rem
+}
+footer{
+    
+    background-color:#2470DB;
+    
+    bottom:0px;
+    width:100%;
+    
+    display: flex;
+    justify-content: center;
+    font-size:3rem
+}
+@media(max-height:926px){
+    .sidebar{
+        width:20%;
+        font-size: 2rem;
+    }
+    main{
+        height:90%;
+    }
+    footer{
+        display:none;
+    }
+    header h1{
+        font-size:1rem
+    }
+    #game-settings{
+        
+        flex-direction: column;
+        
+    }
+    #boardspecs{
+        display: flex;
+        justify-content: space-evenly; 
+    }
+    .nameinput{
+        margin-top:0px;
+        justify-content:center
+    }
+}
+@media(max-width:430px){
+    header{
+        font-size: 1rem;
+    }
+    main{
+    flex-direction: column;
+    column-gap:0px;
+    
+    }
+    #board{
+        align-self: flex-end;
+        height:
+    }
+    .sidebar{
+        flex-direction:row;
+        
+        width:100%;
+        height:10%;
+        font-size:1rem
+    }
+    .sidebar img{
+        margin-top: 0em;
+        margin-bottom:0em;
+        width:10%;
+        
+    }
+    .score{
+        font-size:2rem;
+    }
+    #gamearea{
+        order:1;
+        height: 80%;
+        width:100%     
+    }
+}
+
