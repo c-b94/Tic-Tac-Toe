@@ -1,18 +1,20 @@
-setInterval(() => tick(), 1000);
+setInterval(() => tick(), 1000);//clock for the game
+
+////Query Selectotrs/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const gameBoard = document.querySelector("#board");
-let boardSize = document.querySelector("#board-size").value;
+let boardSize = document.querySelector("#board-size").value;//stores the board size selected
 const startButton = document.querySelector("#start-button");
 const computerToggle = document.querySelector("#computer-player-switch");
-const playerOne = document.querySelector("#player1");
-const playerTwo = document.querySelector("#player2");
+const playerOne = document.querySelector("#player1");// used to id elements fot player 1
+const playerTwo = document.querySelector("#player2");// used to id elements for player 2
 const playerOneArea = document.getElementById("player-1-area");
 const playerTwoArea = document.getElementById("player-2-area");
 const roundNumber = document.getElementById("round-number");
-let NUMBEROFCELLS = boardSize ** 2;
+let NUMBEROFCELLS = boardSize ** 2; //stores the number of cells for the board 
 let namePlayerOne = playerOne.id;
 let namePlayerTwo = playerTwo.id;
-let currentPlayer = playerOne.id;
-
+let currentPlayer = playerOne.id;// used to id current player
+////GameState/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const gameState = {
   players: [playerOne, playerTwo],
   playerOneWin: false,
@@ -29,29 +31,15 @@ const gameState = {
   game2D: [],
   gameStarted: false,
 };
-
+////eventListeners////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 startButton.addEventListener("click", clickStart);
 computerToggle.addEventListener("click", isComputerPlaying);
 gameBoard.addEventListener("click", placepiece);
-function submitName() {
-  if (playerOne.value !== "") {
-    let name = playerOne.value;
-    playerOne.value = "";
-    namePlayerOne = name;
-    playerOneArea.children[0].innerHTML = namePlayerOne;
-  }
-  if (gameState.computerPlayerOn === false) {
-    if (playerTwo.value !== "") {
-      let name = playerTwo.value;
-      playerTwo.value = "";
-      namePlayerTwo = name;
-      playerTwoArea.children[0].innerHTML = namePlayerTwo;
-    } else {
-      playerTwoArea.children[0].innerHTML = playerTwo.id;
-    }
-  }
-}
+
+////eventListeners call back functions//////////////////////////////////////////////////////////////////////////////////////////////////
 function isComputerPlaying(event) {
+  //sets the board and game up for the computer to replace player 2
+  //and toggles to switch back to player 2.only active if game is not started or ongoing.
   if (gameState.gameStarted === false) {
     if (computerToggle.checked === true) {
       namePlayerTwo = "Computer";
@@ -69,6 +57,7 @@ function isComputerPlaying(event) {
   }
 }
 function clickStart(event) {
+  //starts the game when play button is clicked.
   event.preventDefault();
   if (gameState.gameStarted === false) {
     submitName();
@@ -80,8 +69,22 @@ function clickStart(event) {
     gameState.boardIsEmpty = true;
   }
 }
-
+function placepiece(event) {
+  //when a div is clicked ,
+  //it is tied to a player id.
+  //the player piece is called.
+  if (gameState.gameStarted === true) {
+    let cell = event.target;
+    if (cell.tagName === "DIV") {
+      playerpiece(cell);
+    }
+    gameState.boardIsEmpty = false;
+    checkIfWin();
+  }
+}
+////automated actions///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function tick() {
+  //actions that run in the background.
   boardSize = document.querySelector("#board-size").value;
   NUMBEROFCELLS = boardSize ** 2;
   playerOneArea.children[2].innerHTML = gameState.playerOneScore;
@@ -95,9 +98,29 @@ function tick() {
     }
   }
 }
-
+////game framework functions//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function submitName() {
+  //submits players name 
+  if (playerOne.value !== "") {
+    let name = playerOne.value;
+    playerOne.value = "";
+    namePlayerOne = name;
+    playerOneArea.children[0].innerHTML = namePlayerOne;
+  }
+  if (gameState.computerPlayerOn === false) {
+    if (playerTwo.value !== "") {
+      let name = playerTwo.value;
+      playerTwo.value = "";
+      namePlayerTwo = name;
+      playerTwoArea.children[0].innerHTML = namePlayerTwo;
+    } else {
+      playerTwoArea.children[0].innerHTML = playerTwo.id;
+    }
+  }
+}
 function firstPlayer() {
   //random seed for who plays first
+  //generates current player underline
   let seed = Math.random();
   if (seed >= 1 / 2) {
     currentPlayer = playerTwo.id;
@@ -111,7 +134,8 @@ function firstPlayer() {
   }
 }
 function currentPlayerSwitch() {
-  //switch players
+  //switch players.
+  //moves current player underline.
   switch (currentPlayer) {
     case playerOne.id:
       if (gameState.computerPlayerOn === true) {
@@ -132,7 +156,7 @@ function currentPlayerSwitch() {
 }
 
 function clearBoard() {
-  //clears board and resets
+  //clears board and resets gamestate properties.
   let divCount = document.querySelectorAll("#board div").length;
   for (let i = 0; i < divCount; i++) {
     const divRm = document.querySelector("#board div");
@@ -147,7 +171,7 @@ function clearBoard() {
   gameState.boardIsEmpty = true;
 }
 function buildBoard() {
-  //genrates the board,and calls clearBoard()
+  //genrates the board,board arrays, and calls clearBoard()
   clearBoard();
   NUMBEROFCELLS = boardSize ** 2;
   gameState.ingameBoardSize = NUMBEROFCELLS;
@@ -166,7 +190,7 @@ function buildBoard() {
 function playerpiece(cell) {
   //assigns letter to players,
   //and prevents overwritting.
-  //player switches.
+  //calls currentPlayerSwitch();
 
   if (cell.id === "") {
     cell.id = currentPlayer;
@@ -182,23 +206,25 @@ function playerpiece(cell) {
     }
   }
 }
-
-function placepiece(event) {
-  //when a div is clicked ,
-  //it is tied to a player id.
-  //the player piece is called.
-  if (gameState.gameStarted === true) {
-    let cell = event.target;
-    if (cell.tagName === "DIV") {
-      playerpiece(cell);
+function build2DArray() {
+  //2d array of game board
+  let arr = gameState.game;
+  let arr2D = [];
+  const dimensionLength = Math.sqrt(gameState.ingameBoardSize);
+  for (let i = 0; i < arr.length; i += dimensionLength) {
+    let element = [];
+    let range = i + dimensionLength;
+    for (let k = i; k < range; k++) {
+      element.push(arr[k]);
     }
-    gameState.boardIsEmpty = false;
-    checkIfWin();
+    arr2D.push(element);
   }
+  return (gameState.game2D = arr2D);
 }
-
+////gameplay functions///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function checkBoardRows(arr) {
-  //curently counts pieces regardles on same row
+  //checks for a winning row.
+  //returns the winner.
   const rowLength = Math.sqrt(gameState.ingameBoardSize);
   for (row of arr) {
     let p1count = 0;
@@ -222,6 +248,8 @@ function checkBoardRows(arr) {
   }
 }
 function checkBoardColumns(arr) {
+  //checks for winning column.
+  //returns winner.
   const columnLength = Math.sqrt(gameState.ingameBoardSize);
 
   for (let i = 0; i < columnLength; i++) {
@@ -244,6 +272,7 @@ function checkBoardColumns(arr) {
   }
 }
 function getBoardDiagnal(arr) {
+  //builds a 2d array of arrays of the diagnals of the board
   const diagnalLength = Math.sqrt(gameState.ingameBoardSize);
   let diagnalOne = [];
   let diagnalTwo = [];
@@ -270,6 +299,8 @@ function getBoardDiagnal(arr) {
   return [diagnalOne, diagnalTwo];
 }
 function checkBoardDiagnal(arr) {
+  //checks the diagnal arrays for a win.
+  //returns the winner
   let diagnals = getBoardDiagnal(arr);
   for (let diagnal of diagnals) {
     let p1count = 0;
@@ -291,6 +322,7 @@ function checkBoardDiagnal(arr) {
   }
 }
 function checkForScratch(arr) {
+  //checks for game scratch or tie
   if (gameState.playerOneWin === false && gameState.playerTwoWin === false) {
     let stillMoves = false;
     for (let i = 0; i < arr.length; i++) {
@@ -305,6 +337,8 @@ function checkForScratch(arr) {
   }
 }
 function checkIfWin() {
+  //searches for a win condition to be met and makes the alert message for the winners.
+  //progresses the game to the next round, clear board,catches the game winner, and calls gameOver().
   checkBoardRows(gameState.game2D);
   checkBoardColumns(gameState.game2D);
   checkBoardDiagnal(gameState.game2D);
@@ -335,6 +369,7 @@ function checkIfWin() {
 }
 
 function gameOver() {
+  //ends game and resets the gameState.
   if (gameState.playerOneScore > gameState.playerTwoScore) {
     alert(`${namePlayerOne} won the game!`);
   } else {
@@ -350,24 +385,11 @@ function gameOver() {
   clearBoard();
 }
 
-function build2DArray() {
-  let arr = gameState.game;
-  let arr2D = [];
-  const dimensionLength = Math.sqrt(gameState.ingameBoardSize);
-  for (let i = 0; i < arr.length; i += dimensionLength) {
-    let element = [];
-    let range = i + dimensionLength;
-    for (let k = i; k < range; k++) {
-      element.push(arr[k]);
-    }
-    arr2D.push(element);
-  }
-  return (gameState.game2D = arr2D);
-}
 
-////////////Computer player Brain////////////////////
+
+////Computer player Brain////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function checkBoardRowsComputer(arr) {
-  //curently counts pieces regardles on same row
+  //computer version of checkBoardRows()
   const rowLength = Math.sqrt(gameState.ingameBoardSize);
   let indexOfBestRow = 0;
   let bestRowCount = 0;
@@ -387,6 +409,7 @@ function checkBoardRowsComputer(arr) {
   return { array: arr[indexOfBestRow], count: bestRowCount };
 }
 function checkBoardColumnsComputer(arr) {
+  //computer version of checkBoardColumnComputer()
   const columnLength = Math.sqrt(gameState.ingameBoardSize);
   let bestColumnArray = [];
   let bestColumnCount = 0;
@@ -407,6 +430,7 @@ function checkBoardColumnsComputer(arr) {
   return { array: bestColumnArray, count: bestColumnCount };
 }
 function checkBoardDiagnalComputer(arr) {
+  //computer version of checkBoardDiagnalComputer()
   let diagnals = getBoardDiagnal(arr);
   let bestDiagnalCount = 0;
   let indexOfBestDiagnal = 0;
@@ -425,6 +449,7 @@ function checkBoardDiagnalComputer(arr) {
   return { array: diagnals[indexOfBestDiagnal], count: bestDiagnalCount };
 }
 function placePieceComputer(cell) {
+  //computer version placePiece()
   if (currentPlayer === playerTwo.id) {
     if (cell.tagName === "DIV") {
       playerpiece(cell);
@@ -436,6 +461,7 @@ function placePieceComputer(cell) {
 }
 
 function computerPlayer() {
+  //searches for a move based on opposing player, and calls the placepieceComputer() 
   let moves = [
     checkBoardColumnsComputer(gameState.game2D),
     checkBoardRowsComputer(gameState.game2D),
